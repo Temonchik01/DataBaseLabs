@@ -1,13 +1,15 @@
 ```mermaid
 erDiagram
-    BaseCharacter ||--|| Combatant : "is a"
-    Combatant }|--o{ Attacks : "has"
-    Combatant ||--o| Item : "holds"
-    Attacks }|--o{ Effect : "applies"
+    BaseCharacter ||--o| Combatant : "is template for"
+    Combatant ||--o{ CombatantAttacks : "equipped with"
+    Attacks ||--o{ CombatantAttacks : "assigned to"
+    Combatant }|--o| Item : "holds"
+    Attacks ||--o{ AttackEffects : "has"
+    Effect ||--o{ AttackEffects : "linked to"
     Item ||--o| Effect : "triggers"
 
     BaseCharacter {
-        int ID PK
+        int id PK
         string name
         int max_hp
         int max_attack
@@ -17,38 +19,45 @@ erDiagram
     }
 
     Combatant {
-        int ID PK
-        string name
-        int max_hp
+        int id PK
+        int base_character_id FK
+        string instance_name
         int current_hp
-        int max_attack
         int current_attack
-        int max_defence
         int current_defence
-        int max_ammo
         int current_ammo
-        int max_speed
         int current_speed
+        int item_id FK
     }
 
     Attacks {
-        int ID PK
+        int id PK
         string name
         int power
-        string effects
         int accuracy
-        int ammo
+        int base_ammo_cost
+    }
+
+    CombatantAttacks {
+        int combatant_id FK
+        int attack_id FK
     }
 
     Item {
-        int ID PK
+        int id PK
         string name
-        string effect
+        int effect_id FK
     }
 
     Effect {
-        int ID PK
+        int id PK
         string name
-        string effect
+        string description
+        float modifier_value
+    }
+
+    AttackEffects {
+        int attack_id FK
+        int effect_id FK
     }
 ```
