@@ -1,4 +1,4 @@
-“‘mermaid
+```mermaid
 erDiagram
     BaseCharacter ||--|| Combatant : "is a"
     Combatant }|--o{ Attacks : "has"
@@ -51,4 +51,4 @@ erDiagram
         string name
         string effect
     }
-“‘
+```
