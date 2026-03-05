@@ -1,12 +1,12 @@
 ```mermaid
 erDiagram
-    BaseCharacter ||--o| Combatant : "is template for"
-    Combatant ||--o{ CombatantAttacks : "equipped with"
-    Attacks ||--o{ CombatantAttacks : "assigned to"
-    Combatant }|--o| Item : "holds"
-    Attacks ||--o{ AttackEffects : "has"
-    Effect ||--o{ AttackEffects : "linked to"
-    Item ||--o| Effect : "triggers"
+BaseCharacter ||--o| Combatant : "шаблон для"
+    Combatant ||--o{ CombatantAttacks : "володіє"
+    Attacks ||--o{ CombatantAttacks : "призначена"
+    Combatant }|--o| Item : "тримає"
+    Attacks ||--o{ AttackEffects : "має"
+    Effect ||--o{ AttackEffects : "пов'язаний з"
+    Item ||--o| Effect : "активує"
 
     BaseCharacter {
         int id PK
