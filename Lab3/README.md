@@ -21,7 +21,7 @@ WHERE id = 1;
 DELETE FROM Combatant
 WHERE id = 2 AND item_id = 3;
 ```
-### Сріншот виконаної команди
+### Скріншот виконаної команди
 ![SQL table of Insertion](./Example_1.jpg)
 ![SQL table of item of a combatant](./Example_2.jpg)
 ## Висновок
