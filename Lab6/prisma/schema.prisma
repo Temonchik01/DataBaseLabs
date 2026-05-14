@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model attackeffects {
+  attack_id Int?
+  effect_id Int?
+  duration_turns Int @default(1) // Додаємо тривалість дії ефекту (за замовчуванням 1 хід)
+
+  attacks   attacks? @relation(fields: [attack_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  effect    effect?  @relation(fields: [effect_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@ignore
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model attacks {
+  id               Int                @id @default(autoincrement())
+  name             String             @db.VarChar(255)
+  power            Int?
+  accuracy         Int?
+  base_ammo_cost   Int?
+  description      String?
+  attackeffects    attackeffects[]    @ignore
+  combatantattacks combatantattacks[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model basecharacter {
+  id          Int         @id @default(autoincrement())
+  name        String      @db.VarChar(255)
+  max_hp      Int?
+  max_attack  Int?
+  max_defence Int?
+  max_ammo    Int?
+  max_speed   Int?
+  combatant   combatant[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model combatant {
+  id                Int            @id @default(autoincrement())
+  base_character_id Int?
+  instance_name     String         @db.VarChar(255)
+  current_hp        Int?
+  current_attack    Int?
+  current_defence   Int?
+  current_ammo      Int?
+  current_speed     Int?
+  item_id           Int?
+  basecharacter     basecharacter? @relation(fields: [base_character_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  item              item?          @relation(fields: [item_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model combatantattacks {
+  id        Int      @id @default(autoincrement())
+  attack_id Int?
+  attacks   attacks? @relation(fields: [attack_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model effect {
+  id             Int             @id @default(autoincrement())
+  name           String          @db.VarChar(255)
+  description    String
+  modifier_value Float?
+  attackeffects  attackeffects[] @ignore
+  item           item[]
+}
+
+model item {
+  id          Int         @id @default(autoincrement())
+  name        String      @db.VarChar(255)
+  effect_id   Int?
+  description String?
+  combatant   combatant[]
+  effect      effect?     @relation(fields: [effect_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model battle_history {
+  id              Int      @id @default(autoincrement())
+  winner_name     String   @db.VarChar(255)
+  duration_minute Int
+  battle_date     DateTime @default(now())
+}
